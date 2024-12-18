@@ -1,1 +1,2 @@
 # M-Shell
+This repository contains the implementation of M-Shell a program written in **C** for **Linux** systems. The shell mimics some basic functionalities of a Unix-like shell such as command execution, process creation, piping, and redirection.
