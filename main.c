@@ -33,16 +33,44 @@ char** parse_input(char* buffer) {
 
 }
 
+int execute_command (char** args) {
+
+    pid_t pid = fork();
+    if(pid == -1) {
+        perror("Fork failed");
+        return 1;
+    }
+    if (pid == 0) {
+        //child process
+        //char *argv[] = {"/bin/ls", "-l", NULL};  
+        //execve(argv[0], argv, NULL);
+        char path[200] ="/bin/";
+        strcat(path, args[0]);
+        args[0]=path;
+        execve(args[0], args, NULL);
+    }
+    else {
+        //parent process
+        wait(NULL);
+        printf("Done with execve\n");
+    }
+    return 1;
+}
 
 int main (void) {
 
+    int status = 1;
     char* buffer;
     char** args;
-    printf("M-Shell>");
-    buffer = get_input();
-    args = parse_input(buffer);
-    free(buffer);
-    free(args);
+    while (status) {
+        printf("M-Shell>");
+        buffer = get_input();
+        args = parse_input(buffer);
+        status = execute_command(args);
+        free(buffer);
+        free(args);
+    }
+    
     return 0;
 
 }
